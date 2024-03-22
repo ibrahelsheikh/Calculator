@@ -21,11 +21,12 @@ import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     TextView resulttext;
     EditText firstnum, secondnum;
     Button addbutton, subbutton, mulbutton, divbutton, historybutton;
     File calculationFile;
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         mulbutton = findViewById(R.id.multiply);
         divbutton = findViewById(R.id.Divide);
         historybutton = findViewById(R.id.history);
+
+
 
         addbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void divtwonumber() {
-        int num1, num2, div;
-        num1 = Integer.parseInt(firstnum.getText().toString());
-        num2 = Integer.parseInt(secondnum.getText().toString());
+        float num1, num2, div;
+        num1 = Float.parseFloat(firstnum.getText().toString());
+        num2 = Float.parseFloat(secondnum.getText().toString());
         if(num2 != 0) {
             div = num1 / num2;
             resulttext.setText("Result: " + div);
@@ -116,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             resulttext.setText("Cannot divide by zero");
         }
     }
+
 
     private void saveCalculationToFile(String calculation) {
         if (ContextCompat.checkSelfPermission(
@@ -152,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                // Call saveCalculationToFile again with the last calculation
+                saveCalculationToFile(resulttext.getText().toString());
             } else {
                 Toast.makeText(this, "Need permission", Toast.LENGTH_SHORT).show();
             }
